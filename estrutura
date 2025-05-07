@@ -1,0 +1,38 @@
+# Plataforma-digital-pim-
+plataforma criada em python para um trabalho da graduação 
+
+#importando json e criptografia 
+import json 
+from cryptography.fernet import Fernet 
+ 
+ 
+# Função para salvar os dados no arquivo JSON 
+def salvar_dados(dados, chave_secreta): 
+   salvar_dados = {"usuarios": dados, "chave_secreta": chave_secreta.decode()} 
+   with open("usuarios.json", "w") as arquivo: 
+       json.dump(salvar_dados, arquivo, indent=4) 
+ 
+ 
+# Função para carregar os dados do arquivo JSON 
+def carregar_dados(): 
+   try: 
+       with open("usuarios.json", "r") as arquivo: 
+           dados = json.load(arquivo) 
+           if "usuarios" in dados and "chave_secreta" in 
+dados: 
+               chave_secreta = dados["chave_secreta"].encode() 
+               return dados["usuarios"], chave_secreta 
+           else: 
+               raise ValueError("Estrutura do arquivo inválida") 
+   except (FileNotFoundError, json.JSONDecodeError, 
+ValueError): 
+       chave_secreta = Fernet.generate_key() 
+       return [], chave_secreta 
+ 
+# Função para validar a senha 
+def validar_senha(senha): 
+   return len(senha) >= 6 and any(char.isupper() for char in senha) and any(char.isdigit() for char in senha) 
+ 
+# Função para validar email 
+def validar_email(email): 
+   return "@" in email and ".com" in email
